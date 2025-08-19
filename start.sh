@@ -1,0 +1,2 @@
+python3 app_encryptor
+python3 app_decryptor
