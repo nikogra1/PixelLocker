@@ -1,4 +1,5 @@
 from encryption import Encryption
+import os
 import pygame
 import pygame_gui
 pygame.init()
@@ -19,6 +20,7 @@ clock = pygame.time.Clock()
 pygame.display.set_caption("Encryptor")
 
 czcionka = pygame.font.SysFont("comfortaa",24)
+czcionka1 = pygame.font.SysFont("comfortaa",20)
 
 czarny = (0, 0, 0)
 bialy = (255, 255, 255)
@@ -48,19 +50,33 @@ while dziala:
         manager.process_events(event)
 
     # Aktualizacja ekranu (rysowanie)
-    if PIn != PIn1:
-        file = open("encrypted_text.txt","r")
-        read_content = file.readlines()
-        file2 = open("dencrypted_text.txt","a")
-        for i in read_content:
-            i = i.removesuffix('\n')
-            i = i.rstrip()
-            
-            file2.write(str(encryption.decrypt(PIn,i)))
-        PIn1 = PIn
-        file2.close()
+
+
     manager.update(time_delta)
     ekran.fill(czarny)  # Biały kolor tła
+
+    if PIn != PIn1:
+        if os.path.exists("encrypted_text.txt"):
+            tekst1 = "Plik encrypted_text.txt istnieje więc można go odszyfrować."
+            file = open("encrypted_text.txt","r")
+            read_content = file.readlines()
+            file2 = open("dencrypted_text.txt","a")
+            for i in read_content:
+                i = i.removesuffix('\n')
+                i = i.rstrip()
+                
+                file2.write(str(encryption.decrypt(PIn,i)))
+            PIn1 = PIn
+            file2.close()
+        else:
+            tekst1 = """Niestety plik encrypted_text.txt nie istnieje więc nie można go odszyfrować.
+Przed ponowną próbą odszyfrowania uruchom program app_encryptor.py."""
+        tekst1_powierzchnia = czcionka1.render(tekst1, True, bialy, czarny) # (tekst, wygładzanie, kolor, tło)
+        tekst1_prostokat = tekst1_powierzchnia.get_rect()
+        tekst_prostokat.center = (szerokosc_okna // 2, 80) # Wyśrodkowanie tekstu
+        ekran.blit(tekst1_powierzchnia, tekst1_prostokat) # Rysowanie tekstu
+        
+
     manager.draw_ui(ekran)
     ekran.blit(tekst_powierzchnia, tekst_prostokat) # Rysowanie tekstu
 
