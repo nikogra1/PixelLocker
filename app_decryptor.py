@@ -17,7 +17,7 @@ ekran = pygame.display.set_mode((szerokosc_okna, wysokosc_okna))
 clock = pygame.time.Clock()
 
 # Ustawienie tytułu okna
-pygame.display.set_caption("Encryptor")
+pygame.display.set_caption("Decryptor")
 
 czcionka = pygame.font.SysFont("comfortaa",24)
 czcionka1 = pygame.font.SysFont("comfortaa",20)
@@ -46,7 +46,7 @@ while dziala:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 PIn1 = PIn
-                PIn = f"Wprowadzony tekst: {text_input.get_text()}"
+                PIn = f"{text_input.get_text()}"
         manager.process_events(event)
 
     # Aktualizacja ekranu (rysowanie)
@@ -58,14 +58,11 @@ while dziala:
     if PIn != PIn1:
         if os.path.exists("encrypted_text.txt"):
             tekst1 = "Plik encrypted_text.txt istnieje więc można go odszyfrować."
-            file = open("encrypted_text.txt","r")
-            read_content = file.readlines()
-            file2 = open("dencrypted_text.txt","a")
-            for i in read_content:
-                i = i.removesuffix('\n')
-                i = i.rstrip()
-                
-                file2.write(str(encryption.decrypt(PIn,i)))
+            file = open("encrypted_text.txt","rb")
+            read_content = file.read()
+            file2 = open("dencrypted_text.txt","w")
+            dane_odszyfrowane_bajty = encryption.decrypt(PIn, read_content)
+            file2.write(dane_odszyfrowane_bajty.decode("UTF-32"))
             PIn1 = PIn
             file2.close()
         else:

@@ -44,17 +44,15 @@ while dziala:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 PIn1 = PIn
-                PIn = f"Wprowadzony tekst: {text_input.get_text()}"
+                PIn = f"{text_input.get_text()}"
         manager.process_events(event)
 
     # Aktualizacja ekranu (rysowanie)
     if PIn != PIn1:
         file = open("text_to_encrypt.txt","r")
-        read_content = file.read()
-        file2 = open("encrypted_text.txt","a")
-        for i in list(read_content):
-            file2.write(str(encryption.encrypt(i,PIN=PIn))+"""                                                   
-""")
+        read_content = file.readline()
+        file2 = open("encrypted_text.txt","wb")
+        file2.write(encryption.encrypt(read_content,PIN=PIn))
         PIn1 = PIn
         file2.close()
     manager.update(time_delta)
